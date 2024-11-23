@@ -148,15 +148,15 @@ func main() {
 	var slice1 []int = []int{}
 	var slice2 []int = make([]int, 0, n)
 
-	fmt.Println("The Slice without prelocation of memory", timeLoop(slice1, n))
-	fmt.Println("The Slice with prelocation of memory", timeLoop(slice2, n))
+	fmt.Println("The Slice without preallocation of memory", timeLoop(slice1, n))
+	fmt.Println("The Slice with preallocation of memory", timeLoop(slice2, n))
 
 	//String Manipulation
 	var myStringRune = []rune("résume")
 	var indexed = myStringRune[1]
 
 	for i, v := range myStringRune {
-		fmt.Println(i, v)
+		fmt.Println(i, v) // v is the value at that index, which will be a rune, or Unicode code point.
 	}
 	fmt.Println(indexed)
 
@@ -167,7 +167,7 @@ func main() {
 		strBuilder.WriteString(str[i])
 	}
 
-	fmt.Printf("the concatenated string is %v\n", strBuilder)
+	fmt.Printf("the concatenated string is %v\n", strBuilder.String())
 	fmt.Printf("%b\n", myStringRune[1])
 
 	// var gasEngineVar gasEngine = gasEngine{mpg: 10, gallons: 20, owner: owner{name: "Samar"}, brandName: brandName{"bmw"}, int: 10}
@@ -182,6 +182,28 @@ func main() {
 
 	// fmt.Println(canMakeit(gasEngineVar, 150))
 	fmt.Println(canMakeit(electricEngineVar, 150))
+
+	//POINTERS
+	var p *int32 = new(int32)
+	var i int32
+	fmt.Printf("The value p points to is: %v\n", *p)
+	fmt.Printf("The value of i is: %v\n", i)
+
+	p = &i //points the memory location of i to p
+	*p = 1 //storing a value in that mem location, Now both p and i are pointing to same mem location so this var assignment will reflect to both *p and i
+
+	fmt.Printf("The value p points to is: %v\n", *p)
+	fmt.Printf("The value of i is: %v\n", i)
+
+	var slice []int32 = []int32{1, 2, 3}
+	var sliceCopy = slice
+	sliceCopy[2] = 4
+	fmt.Println("The result of both slice and sliceCopy as the underline behaviour is similar to pointer", slice, sliceCopy)
+
+	var thing1 [5]float64 = [5]float64{1, 2, 3, 4, 5}
+	fmt.Println("The memory location of the first char", &thing1[0])
+	var results = square(&thing1)
+	fmt.Println(thing1, results)
 }
 
 type electricEngine struct {
@@ -245,4 +267,12 @@ func timeLoop(slice []int, n int) time.Duration {
 	}
 	t1 := time.Now()
 	return t1.Sub(t0)
+}
+
+func square(thing2 *[5]float64) [5]float64 {
+	fmt.Println("The memory location of the second char", &thing2[0])
+	for i := range thing2 {
+		thing2[i] = thing2[i] * thing2[i]
+	}
+	return *thing2
 }
